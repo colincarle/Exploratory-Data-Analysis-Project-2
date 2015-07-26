@@ -26,7 +26,7 @@ casted1 <- acast(molten1, variable ~ year, sum)
 
 ## open the png device and plot the total emissions as a function of year using
 ## the base graphics function barplot.
-png(filename = "./plot1.png", width = 640, height = 640)
+png(filename = "./plot1.png", width = 480, height = 480)
 barplot(casted1, ylim = c(0, 8e6), yaxt = "n",
         ylab = bquote(PM[2.5]~"all sources (millions of tons)"),
         main = bquote("Total PM"[2.5]~"Emissions in the United States"~

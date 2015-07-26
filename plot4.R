@@ -45,7 +45,7 @@ plot4 <- ggplot(casted4, aes(x = year, y = Emissions)) +
           axis.title.x = element_text(size = 14))
 
 ## Output the stored ggplot object 'plot4' to the png device.
-png(filename = "./plot4.png", width = 640, height = 640)
+png(filename = "./plot4.png", width = 480, height = 480)
 print(plot4)
 dev.off()
 

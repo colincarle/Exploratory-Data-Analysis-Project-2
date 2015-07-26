@@ -1,3 +1,4 @@
+## Plot 6
 library(reshape2)
 library(ggplot2)
 
@@ -56,8 +57,8 @@ plot6 <- ggplot(casted6, aes(x = year, y = Emissions)) +
     geom_smooth(aes(colour = fips), method = "lm", linetype = "dashed",
                 se = FALSE) +
     scale_x_continuous(breaks = c(casted6$year)) +
-    ggtitle(bquote("PM"[2.5]~"Emissions from Motor Vehicle Sources"~
-                   "1999 - 2008")) +
+    ggtitle(bquote(atop("PM"[2.5]~"Changes in Emissions from",
+                   "Motor Vehicle Sources 1999 - 2008"))) +
     ylab(bquote("PM"[2.5]~"Motor Vehicle Emissions (feature scaled)")) +
     scale_colour_discrete(name = "County",
                           labels = c("Los Angeles", "Baltimore City")) +
@@ -68,7 +69,7 @@ plot6 <- ggplot(casted6, aes(x = year, y = Emissions)) +
           axis.title.x = element_text(size = 14))
 
 ## output the stored ggplot object 'plot6' to the png device
-png(filename = "./plot6.png", width = 640, height = 480)
+png(filename = "./plot6.png", width = 480, height = 480)
 print(plot6)
 dev.off()
 

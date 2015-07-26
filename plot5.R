@@ -1,3 +1,4 @@
+## Plot 5
 library(reshape2)
 library(ggplot2)
 
@@ -37,15 +38,15 @@ casted5     <- dcast(molten5, year ~ variable, sum)
 plot5 <- ggplot(casted5, aes(x = year, y = Emissions)) +
     geom_bar(stat = "identity", colour = "dodgerblue", fill = "dodgerblue4") +
     scale_x_continuous(breaks = c(casted5$year)) +
-    ggtitle(bquote("PM"[2.5]~"Emissions From Motor Vehicle Sources in"~
-                       "Baltimore City, Maryland 1999 - 2008")) +
+    ggtitle(bquote(atop("PM"[2.5]~"Emissions From Motor Vehicle Sources in",
+                       "Baltimore City, Maryland 1999 - 2008"))) +
     ylab(expression("PM"[2.5]*" Motor Vehicle Emissions (tons)")) +
     theme(plot.title = element_text(size = 20, face = "bold", vjust = 0.75),
           axis.title.y = element_text(size = 14, face = "bold", vjust = 0.35),
           axis.title.x = element_text(size = 14))
 
 ## Output the stored ggplot object 'plot5' to the png device.
-png(filename = "./plot5.png", width = 640, height = 640)
+png(filename = "./plot5.png", width = 480, height = 480)
 print(plot5)
 dev.off()
 

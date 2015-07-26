@@ -30,7 +30,7 @@ casted2 <- acast(molten2, variable ~ year, sum)
 
 ## open the png device and plot Baltimore emissions as a function of year using
 ## the base graphics function barplot.
-png(filename = "./plot2.png", width = 640, height = 640)
+png(filename = "./plot2.png", width = 480, height = 480)
 barplot(casted2, yaxt = "n", ylim = c(0, 3500),
         ylab = bquote("PM"[2.5]~"all sources (tons)"),
         main = bquote("Total PM"[2.5]~"Emissions in Baltimore City,"~

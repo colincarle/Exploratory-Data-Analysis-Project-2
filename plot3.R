@@ -33,15 +33,15 @@ plot3   <- ggplot(casted3, aes(x = year, y = Emissions)) +
     geom_bar(stat = "identity", colour = "dodgerblue", fill = "dodgerblue4") +
     facet_wrap(~type, nrow = 1) +
     scale_x_continuous(breaks = c(casted3$year)) +
-    ggtitle(bquote("PM"[2.5]~"Total Emissions in the United States"~
-                       "by Type 1999 - 2008")) +
+    ggtitle(bquote(atop("PM"[2.5]~"Total Emissions in the United States",
+                       "by Type 1999 - 2008"))) +
     ylab(expression("PM"[2.5]*" Emissions (tons)")) +
     theme(plot.title = element_text(size = 20, face = "bold", vjust = 0.75),
           axis.title.y = element_text(size = 14, face = "bold", vjust = 0.35),
           axis.title.x = element_text(size = 14))
 
 ## output the stored ggplot object 'plot3' to the png device
-png(filename = "./plot3.png", width = 640, height = 480)
+png(filename = "./plot3.png", width = 480, height = 480)
 print(plot3)
 dev.off()
 
