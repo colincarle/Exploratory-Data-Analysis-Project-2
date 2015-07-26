@@ -1,6 +1,7 @@
 library(reshape2)
 library(ggplot2)
 
+## Check for the presence of the data file, and download if not present.
 dataFile <- "./data/eiinformation.zip"
 if (!file.exists(dataFile))
 {
@@ -9,49 +10,40 @@ if (!file.exists(dataFile))
     download.file(fileURL, destfile = dataFile, method = 'curl')
     rm(fileURL)
 }
-unzip(dataFile, exdir = "./data")
-NEI  <- readRDS("./data/summarySCC_PM25.rds")
-SCC  <- readRDS("./data/Source_Classification_code.rds")
-baltimoreCity3 <- subset(NEI, NEI$fips == 24510)
 
-molten3 <- melt(baltimoreCity3,
+# Extract the contents of the compressed archive.
+unzip(dataFile, exdir = "./data")
+
+# Read the National Emission Inventory and Source Classification Code table into
+# data frames NEI and SCC
+NEI                <- readRDS("./data/summarySCC_PM25.rds")
+SCC                <- readRDS("./data/Source_Classification_code.rds")
+baltimoreCity <- NEI[NEI$fips == "24510", ]
+
+## reduce the NEI dataframe to its molten form and recast as a data frame to
+## calculate total emissions in Baltimore as a function of type and year.
+molten3 <- melt(baltimoreCity,
                 id.vars = c("fips", "SCC", "Pollutant", "type", "year"),
                 measure.vars = "Emissions")
 casted3 <- dcast(molten3, year + type ~ variable, sum)
 
-temp <- qplot(aes(x = year, y = Emissions), data = casted3)
-
-temp
-
-plot3a <- qplot(year, Emissions, data = casted3, geom = "bar", stat = "identity") +
-            scale_x_continuous(breaks = c(casted3$year)) +
-            facet_wrap(~ type, nrow = 1)
-plot3a
-
-plot3b <- qplot(year, Emissions, data = casted3, geom = "bar", stat = "identity") +
+## plot the total emissions by type using ggplot. Each type is displayed
+## separately by using facet_wrap about the type variable.
+plot3   <- ggplot(casted3, aes(x = year, y = Emissions)) +
+    geom_bar(stat = "identity", colour = "dodgerblue", fill = "dodgerblue4") +
+    facet_wrap(~type, nrow = 1) +
     scale_x_continuous(breaks = c(casted3$year)) +
-    facet_wrap(~ type, nrow = 2)
-plot3b
+    ggtitle(bquote("PM"[2.5]~"Total Emissions in the United States"~
+                       "by Type 1999 - 2008")) +
+    ylab(expression("PM"[2.5]*" Emissions (tons)")) +
+    theme(plot.title = element_text(size = 20, face = "bold", vjust = 0.75),
+          axis.title.y = element_text(size = 14, face = "bold", vjust = 0.35),
+          axis.title.x = element_text(size = 14))
 
-plot3c <- qplot(x = year, y = Emissions, fill = type, data = casted3,
-                geom = "bar", stat = "identity", position = "dodge") +
-                scale_x_continuous(breaks = c(casted3$year))
-plot3c
-
-
-png(filename = "./plot3a.png", width = 640, height = 640)
-plot3a
-dev.off()
-png(filename = "./plot3b.png", width = 640, height = 640)
-plot3b
-dev.off()
-png(filename = "./plot3c.png", width = 640, height = 640)
-plot3c
+## output the stored ggplot object 'plot3' to the png device
+png(filename = "./plot3.png", width = 640, height = 480)
+print(plot3)
 dev.off()
 
-# barplot(casted2, yaxt = "n", ylim = c(0, 3500),
-#         ylab = expression("PM"[2.5]*" all sources (tons)"),
-#         main = expression("Total PM"[2.5]*" Emissions in Baltimore 1999 through 2008"),
-#         col = "dodgerblue4")
-# axis(side = 2, at = c(seq(0, 3500, 500)), labels = c(seq(0, 3500, 500)))
-# dev.off()
+# clean up the workspace
+rm(list=ls())
