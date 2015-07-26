@@ -1,3 +1,4 @@
+## Plot 2
 library(reshape2)
 
 ## Check for the presence of the data file, and download if not present.
